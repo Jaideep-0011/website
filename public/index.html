@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Bookstore</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Online Bookstore</h1>
+        <p>Discover your next favourite book.</p>
+    </header>
+
+    <main>
+        <section class="catalogue">
+            <h2>Book Catalogue</h2>
+
+            <div class="search-bar">
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search by title or author..."
+                >
+                <button id="searchButton">Search</button>
+                <button id="showAllButton">Show All</button>
+            </div>
+
+            <p id="message"></p>
+            <div id="bookList" class="book-grid"></div>
+        </section>
+
+        <section class="order-section">
+            <h2>Place an Order</h2>
+
+            <form id="orderForm">
+                <label for="bookId">Book ID</label>
+                <input
+                    type="text"
+                    id="bookId"
+                    required
+                    placeholder="Enter the book ID"
+                >
+
+                <label for="quantity">Quantity</label>
+                <input
+                    type="number"
+                    id="quantity"
+                    min="1"
+                    step="1"
+                    required
+                    placeholder="Enter quantity"
+                >
+
+                <button type="submit">Place Order</button>
+            </form>
+
+            <p id="orderMessage"></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>Online Bookstore Management System</p>
+    </footer>
+
+    <script>
+        const bookList = document.getElementById('bookList');
+        const message = document.getElementById('message');
+        const searchInput = document.getElementById('searchInput');
+
+        async function loadBooks(query = '') {
+            message.textContent = 'Loading books...';
+            bookList.innerHTML = '';
+
+            try {
+                const url = query
+                    ? `/api/books/search?q=${encodeURIComponent(query)}`
+                    : '/api/books';
+
+                const response = await fetch(url);
+                const books = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(books.message || 'Could not load books.');
+                }
+
+                message.textContent = books.length
+                    ? `${books.length} book(s) found.`
+                    : 'No books found.';
+
+                books.forEach(book => {
+                    const card = document.createElement('article');
+                    card.className = 'book-card';
+
+                    const title = document.createElement('h3');
+                    title.textContent = book.title;
+
+                    const author = document.createElement('p');
+                    author.textContent = `Author: ${book.author}`;
+
+                    const price = document.createElement('p');
+                    price.textContent = `Price: ₹${book.price}`;
+
+                    const stock = document.createElement('p');
+                    stock.textContent = `Available Stock: ${book.stock}`;
+
+                    const id = document.createElement('p');
+                    id.className = 'book-id';
+                    id.textContent = `Book ID: ${book._id}`;
+
+                    const selectButton = document.createElement('button');
+                    selectButton.textContent = 'Select Book';
+                    selectButton.addEventListener('click', () => {
+                        document.getElementById('bookId').value = book._id;
+                        document.getElementById('quantity').focus();
+                    });
+
+                    card.append(title, author, price, stock, id, selectButton);
+                    bookList.appendChild(card);
+                });
+            } catch (error) {
+                message.textContent = error.message;
+            }
+        }
+
+        document.getElementById('searchButton').addEventListener('click', () => {
+            loadBooks(searchInput.value.trim());
+        });
+
+        searchInput.addEventListener('keydown', event => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                loadBooks(searchInput.value.trim());
+            }
+        });
+
+        document.getElementById('showAllButton').addEventListener('click', () => {
+            searchInput.value = '';
+            loadBooks();
+        });
+
+        
+document.getElementById('orderForm').addEventListener('submit', async event => {
+    event.preventDefault();
+
+    const orderMessage = document.getElementById('orderMessage');
+    const bookId = document.getElementById('bookId').value.trim();
+    const quantity = document.getElementById('quantity').value;
+
+    orderMessage.textContent = 'Processing order...';
+
+    try {
+        const response = await fetch('/api/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ bookId, quantity })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || 'Order failed.');
+        }
+
+        orderMessage.textContent =
+            `${result.message} Total: ₹${result.order.totalPrice}`;
+
+        event.target.reset();
+        await loadBooks();
+    } catch (error) {
+        orderMessage.textContent = error.message;
+    }
+});
+
+
+        loadBooks();
+    </script>
+
+</body>
+</html>

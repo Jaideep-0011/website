@@ -1,0 +1,193 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    color: #222;
+    line-height: 1.6;
+}
+
+header {
+    background: #17324d;
+    color: white;
+    text-align: center;
+    padding: 30px 15px;
+}
+
+header h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+header p {
+    color: #dbeafe;
+}
+
+main {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+section {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 12px #0000000d;
+}
+
+h2 {
+    color: #17324d;
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.search-bar input {
+    flex: 1;
+    min-width: 0;
+}
+
+button {
+    padding: 11px 16px;
+    border: none;
+    border-radius: 6px;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background: #1747b3;
+}
+
+#showAllButton {
+    background: #64748b;
+}
+
+#showAllButton:hover {
+    background: #475569;
+}
+
+#message,
+#orderMessage {
+    margin: 12px 0;
+    color: #475569;
+}
+
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.book-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 20px;
+    background: #fff;
+    overflow-wrap: anywhere;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.book-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px #00000012;
+}
+
+.book-card h3 {
+    color: #17324d;
+    margin-bottom: 12px;
+}
+
+.book-card p {
+    margin: 7px 0;
+    font-size: 14px;
+}
+
+.book-card .book-id {
+    font-size: 11px;
+    color: #64748b;
+    margin: 12px 0;
+}
+
+.book-card button {
+    width: 100%;
+    margin-top: 8px;
+}
+
+.order-section {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.order-section label {
+    display: block;
+    font-weight: bold;
+    margin: 15px 0 6px;
+}
+
+.order-section button {
+    margin-top: 18px;
+    width: 100%;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #64748b;
+}
+
+@media (max-width: 800px) {
+    .book-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    header h1 {
+        font-size: 25px;
+    }
+
+    main {
+        padding: 0 10px;
+        margin: 15px auto;
+    }
+
+    section {
+        padding: 16px;
+    }
+
+    .book-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .search-bar {
+        flex-wrap: wrap;
+    }
+
+    .search-bar input {
+        flex-basis: 100%;
+    }
+}
